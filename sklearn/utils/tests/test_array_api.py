@@ -578,7 +578,8 @@ def test_move_estimator_to_ignores_classes_():
     with config_context(array_api_dispatch=True):
         new_est = move_estimator_to(est, xp, device=None)
 
-        # classes_ should remain exactly the same (numpy), not moved to the new namespace
+        # classes_ should remain exactly the same (numpy),
+        # not moved to the new namespace
         assert getattr(new_est.classes_, "__array_namespace__", None) is None
         numpy.testing.assert_array_equal(new_est.classes_, est.classes_)
 
