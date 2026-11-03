@@ -615,8 +615,16 @@ def test_error():
             est.apply(T)
 
         # Categorical cardinality limits depend on the splitter:
-        # - best (DecisionTree*): bitset capacity is 256 categories ([0, 255])
-        # - random (ExtraTree*): up to 2**24 - 1 categories via hash splits
+        # - best (DecisionTree*): bitset capacity is 256 categories
+        # - random (ExtraTree*): up to 2**24 categories via hash splits
+        X_cat_256 = np.array(
+            [f"cat_{idx}" for idx in range(256)], dtype=object
+        ).reshape(-1, 1)
+        y_cat_256 = np.arange(256) % 2
+        est_cat_256 = TreeEstimator(categorical_features=[0], random_state=0)
+        est_cat_256.fit(X_cat_256, y_cat_256)
+        assert est_cat_256.tree_.node_count >= 1
+
         X_cat = np.array([f"cat_{idx}" for idx in range(257)], dtype=object).reshape(
             -1, 1
         )
@@ -626,9 +634,11 @@ def test_error():
             est_cat.fit(X_cat, y_cat)
             assert est_cat.tree_.node_count >= 1
         else:
-            with pytest.raises(
-                ValueError, match=r"Values for categorical features.*\[0, 255\]"
-            ):
+            msg = (
+                "Categorical feature 0 has 257 categories, but at most 256 are"
+                " supported"
+            )
+            with pytest.raises(ValueError, match=msg):
                 est_cat.fit(X_cat, y_cat)
 
     # non positive target for Poisson splitting Criterion

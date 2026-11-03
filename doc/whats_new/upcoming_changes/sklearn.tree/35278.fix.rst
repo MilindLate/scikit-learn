@@ -1,5 +1,7 @@
-:func:`sklearn.tree.DecisionTreeClassifier` and
-:func:`sklearn.tree.DecisionTreeRegressor`: fixed the ``categorical_features``
+:func:`sklearn.tree.DecisionTreeClassifier`,
+:func:`sklearn.tree.DecisionTreeRegressor`,
+:func:`sklearn.ensemble.RandomForestClassifier`, and
+:func:`sklearn.ensemble.RandomForestRegressor`: fixed the ``categorical_features``
 docstring and the validation error message.
 
 - The docstring now correctly states the actual category limits: at most 256

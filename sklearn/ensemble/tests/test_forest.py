@@ -2083,9 +2083,8 @@ def test_extratrees_high_cardinality_categorical(Forest):
         if issubclass(Forest, ExtraTreesClassifier)
         else RandomForestRegressor
     )
-    with pytest.raises(
-        ValueError, match=r"Values for categorical features.*\[0, 255\]"
-    ):
+    msg = "Categorical feature 0 has 500 categories, but at most 256 are supported"
+    with pytest.raises(ValueError, match=msg):
         RF(categorical_features=[0], n_estimators=5, random_state=0).fit(X, y)
 
 
